@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Описание страницы для SEO и соцсетей">
+  <meta name="keywords" content="ключевые, слова, через, запятую">
+  <title>Title</title>
+  <link rel="stylesheet" href="css/main.css" type="text/css">
+  <link rel="stylesheet" href="vendors/slick-1.8.1/slick/slick.css">
+  <link rel="stylesheet" href="vendors/slick-1.8.1/slick/slick-theme.css">
+</head>
+
+<body>
+  <section class="game">
+    <div class="modal-bg">
+      <a href="#" class="modal-close">&times;</a>
+      <div class="modal-content">
+        <div class="modal-start">
+          <button class="main-button button-play">Играть!</button> 
+        </div>
+        <div class="lds-ripple"><div></div><div></div></div>
+        <div class="modal-preview">
+          <h1 class="modal-preview__title">Гадание по книгам бестселлерам</h1>
+          <div class="modal-slider-wrap">
+            <div class="modal-slider">
+            </div>
+            <div class="modal-arrows">
+              <div class="slider-arrow slider-arrow__left">
+                <div class="svg" data-src="img/icons/arrow-left.svg"></div> 
+              </div>
+              <div class="slider-arrow slider-arrow__right">
+                <div class="svg" data-src="img/icons/arrow-right.svg"></div> 
+              </div>
+            </div>
+          </div>
+          <div class="modal-bars">
+            <div class="modal-bar modal-bar__page">
+              <h4>Страница</h4> 
+              <input type="text" value="1" class="modal-bar__current modal-bar__item"></input>
+              <div class="modal-bar__select select-page"></div>
+            </div>
+            <div class="modal-bar modal-bar__string">
+              <h4>Строка</h4>
+              <input type="text" value="1" class="modal-bar__current modal-bar__item"></input>
+              <div class="modal-bar__select select-string"> 
+              </div>
+            </div>
+          </div>
+          <div class="modal-buttons">
+            <button class="main-button modal-button">Загадать</button>
+            <button class="modal-button__random">Случайный результат</button>
+          </div>
+        </div>
+        <div class="modal-book">
+          <img class="modal-book__text" src="" alt="">
+          <div class="social-links">
+            <p>Поделиться с друзьями:</p>
+            <button class="social-button social-vk-share"><div class="svg social-icon social-vk" data-src="img/icons/vk.svg"></button>
+            <button class="social-button social-twitter-share"><div class="svg social-icon social-twitter" data-src="img/icons/twitter.svg"></button>
+            <button class="social-button social-facebook-share"><div class="svg social-icon social-facebook" data-src="img/icons/facebook-logo.svg"></button>
+            <button class="social-button social-odnoklassniki-share"><div class="svg social-icon social-odnoklassniki" data-src="img/icons/odnoklassniki.svg"></button>
+          </div>
+          <button class="main-button modal-button__newrandom">Загадать случайно</button>
+          <br>
+          <button class="modal-again">Выбрать другую</button>
+        </div>
+        
+      </div>
+    </div> 
+  </section>
+  <script src="vendors/easySVG/easySVG.min.js"></script>
+  <script src="vendors/jQuery/jquery-3.0.0.min.js"></script>
+  <script src="vendors/slick-1.8.1/slick/slick.min.js"></script>
+  <script src="js/scripts.js" type="text/javascript"></script>
+</body>
+
+</html>
