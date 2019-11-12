@@ -147,9 +147,12 @@ $(document).ready(function () {
     $('.modal-bar__select').on('click', '.modal-bar__item', function () {
       let cont = $(this).text();
       if ($(this).closest($('.modal-bar__select')).hasClass('select-page')) {
+        $('.modal-bar__current').eq(0).val('');
+        $('.modal-bar__current').eq(0).val(cont);
         $('.modal-bar__current').eq(0).attr('value', cont);
-        $('.modal-bar__current').eq(0).text(cont);
       } else {
+        $('.modal-bar__current').eq(1).val('');
+        $('.modal-bar__current').eq(1).val(cont);
         $('.modal-bar__current').eq(1).attr('value', cont); 
       }
       $(this).closest('.modal-bar__select').css({
@@ -208,7 +211,17 @@ $(document).ready(function () {
   {
     $(input).on('input', function(e)
     {
+      if ($(this).siblings($('.modal-bar__select')).hasClass('select-page')) {
+        if ($(this).val() > Number($('.slick-active').attr('data-pagecount'))) {
+          $(this).val(Number($('.slick-active').attr('data-pagecount')));
+        } 
+      } else {
+        if ($(this).val() > Number($('.slick-active').attr('data-linescount'))) {
+          $(this).val(Number($('.slick-active').attr('data-linescount')));
+        }
+      }
       $(this).attr('value', e.target.value);
+      $(this).html(e.target.value);
     })
   })
 
