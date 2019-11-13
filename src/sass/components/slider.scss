@@ -68,3 +68,23 @@
 .modal-bar__item__active {
   order: -1;
 }
+@media (max-width: 450px) {
+  .slider-arrow {
+    &__left {
+      left: 10px;
+    }
+    &__right {
+      right: 10px;
+    }
+  }
+}
+@media (max-width: 400px) {
+  .slider-arrow {
+    &__left {
+      left: 20px;
+    }
+    &__right {
+      right: 20px;
+    }
+  }
+}

@@ -34,8 +34,8 @@ $(document).ready(function () {
   }
 
   function changeSelect() {
-    let pageCount = Number($('.slick-active').attr('data-pageCount')),
-        linesCount = Number($('.slick-active').attr('data-linesCount')),
+    let pageCount = Number($('.slick-active').attr('data-pagecount')),
+        linesCount = Number($('.slick-active').attr('data-linescount')),
         pageSelect = '',
         stringSelect = '';
 
@@ -51,11 +51,13 @@ $(document).ready(function () {
     $(choosenSelect).eq(1).html(stringSelect);
 
     if (Number($(selectedOption).eq(0).attr('value')) > pageCount) {
+      $(selectedOption).eq(0).val(pageCount);
       $(selectedOption).eq(0).attr('value', pageCount);
     }
 
     if (Number(($(selectedOption).eq(1).attr('value')) > linesCount)) {
-      $(selectedOption).eq(1).attr('value', linesCount)
+      $(selectedOption).eq(1).val(linesCount);
+      $(selectedOption).eq(1).attr('value', linesCount);
     }
   }
 
@@ -63,14 +65,11 @@ $(document).ready(function () {
 
   function ajaxLiveLoad(url) {
     let button = $('.button-play');
-    
     $(button).on('click', function () 
     {
-      if ($(chooseWindow).css('display', 'none') && loader === false) {
-        loader = true;
-        Loader();
-        $('.modal-start').fadeOut(250);
-      }
+      loader = true;
+      Loader();
+      $('.modal-start').fadeOut(250);
       if (loader === true) {
         $.ajax({
           url: url,
@@ -89,22 +88,55 @@ $(document).ready(function () {
                 prevArrow: $('.slider-arrow__left'),
                 nextArrow: $('.slider-arrow__right'),
               });
-              changeSelect()
+              inputChange();
+              changeSelect();
             }
+          },
+          error: function() {
+            loader = false;
+            Loader();
+            $(chooseWindow).fadeIn(500);
+            let errorMessage = `<div class="modal-error">Произошла ошибка. <br> Пожалуйста, воспользуйтесь сервисом позднее</div>`;
+            $(chooseWindow).html(errorMessage); 
           }
         });
       }
     });
   }
-  ajaxLiveLoad('https://cors-anywhere.herokuapp.com/moya-kniga.ru/ajax/game.php');
-  
 
-  let selectWrap = $('.modal-bar__current');
+  ajaxLiveLoad('https://cors-anywhere.herokuapp.com/moya-kniga.ru/ajax/game.php');
+
+  function inputChange()
+  {
+    let inputs = $('.modal-bar__current');
+
+    $(inputs).each(function(i, input)
+    {
+      $(input).on('input', function(e)
+      {
+        let pageCount = Number($('.slick-active').attr('data-pagecount')),
+            linesCount = Number($('.slick-active').attr('data-linescount'));
+        if ($(this).siblings($('.modal-bar__select')).hasClass('select-page')) {
+          if ($(this).val() > pageCount) {
+            $(this).val(pageCount);
+          } 
+        } else {
+          if ($(this).val() > linesCount) {
+            $(this).val(linesCount);
+          }
+        }
+        $(this).attr('value', e.target.value);
+        $(this).val(e.target.value);
+      })
+    })
+  }
+
   function showSelect() 
   {
+    let selectWrap = $('.modal-bar__current');
+
     function chooseSelect(number) 
     {
-      $('.modal-bar__select').removeClass('select-active');
       let length = ($('.modal-bar__select').eq(number).children().length) * 30;
       if (length >= 210) {
         $('.modal-bar__select').eq(number).css({
@@ -117,7 +149,6 @@ $(document).ready(function () {
           'height': `${length}px`,
         });
       }
-      $('.modal-bar__select').eq(number).addClass('select-active');
     }
 
     $(selectWrap).on('click', function () {
@@ -128,7 +159,9 @@ $(document).ready(function () {
       }
     })
   }
+
   showSelect()
+
   function hideSelect() {
     $(document).mouseup(function (e) {
       if (!$('.modal-bar__select').is(e.target)
@@ -137,29 +170,27 @@ $(document).ready(function () {
           'max-height': '0',
           'overflow': 'hidden'
         });
-        $('.modal-bar__select').removeClass('select-active');
       }
     });
   }
+
   hideSelect()
 
   function chooseOption() {
     $('.modal-bar__select').on('click', '.modal-bar__item', function () {
       let cont = $(this).text();
+      let currentSelect = $('.modal-bar__current');
       if ($(this).closest($('.modal-bar__select')).hasClass('select-page')) {
-        $('.modal-bar__current').eq(0).val('');
-        $('.modal-bar__current').eq(0).val(cont);
-        $('.modal-bar__current').eq(0).attr('value', cont);
+        $(currentSelect).eq(0).val(cont);
+        $(currentSelect).eq(0).attr('value', cont);
       } else {
-        $('.modal-bar__current').eq(1).val('');
-        $('.modal-bar__current').eq(1).val(cont);
-        $('.modal-bar__current').eq(1).attr('value', cont); 
+        $(currentSelect).eq(1).val(cont);
+        $(currentSelect).eq(1).attr('value', cont); 
       }
       $(this).closest('.modal-bar__select').css({
         'max-height': '0',
         'overflow': 'hidden'
       });
-      $('.modal-bar__select').removeClass('select-active');
     })
   }
 
@@ -183,9 +214,9 @@ $(document).ready(function () {
     changeImage(url);
   }
 
-  function changeImage(data) {
+  function changeImage(url) {
     let image = $('.modal-book__text');
-    $(image).attr('src', data);
+    $(image).attr('src', url);
   } 
 
   let resultButton = $('.modal-button');
@@ -206,24 +237,6 @@ $(document).ready(function () {
     sendResult(true);
   })
 
-  let inputs = $('.modal-bar__current');
-  $(inputs).each(function(i, input)
-  {
-    $(input).on('input', function(e)
-    {
-      if ($(this).siblings($('.modal-bar__select')).hasClass('select-page')) {
-        if ($(this).val() > Number($('.slick-active').attr('data-pagecount'))) {
-          $(this).val(Number($('.slick-active').attr('data-pagecount')));
-        } 
-      } else {
-        if ($(this).val() > Number($('.slick-active').attr('data-linescount'))) {
-          $(this).val(Number($('.slick-active').attr('data-linescount')));
-        }
-      }
-      $(this).attr('value', e.target.value);
-      $(this).html(e.target.value);
-    })
-  })
 
   let againButton = $('.modal-again');
   $(againButton).on('click', function () {
@@ -231,24 +244,24 @@ $(document).ready(function () {
     $(resultWindow).hide();
   })
 
-  function shareing(vkShare, twitterShare, facebookShare, odnoklassnikiShare, box){
+  function sharing(vkShare, twitterShare, facebookShare, odnoklassnikiShare, box){
     var url = '';
     var title = 'game';
     var pimg= '';
     var text = '';
-    function shareingContent(self){
+    function sharingContent(self){
       url = encodeURIComponent('http://moya-kniga.ru/#game');
       pimg = encodeURIComponent($(box).find('.modal-book__text').attr("src"));
     }
     $(box).on('click', vkShare, function(e){
        e.preventDefault();
-       shareingContent(this); 
+       sharingContent(this); 
        var vkShare = 'https://vkontakte.ru/share.php?url='+url+'&title=' + title + '&description='+text+'&image='+pimg; 
        window.open(vkShare,'Поделиться','toolbar=0,status=0,width=626,height=436');
     });
     $(box).on('click', twitterShare, function(e){
        e.preventDefault();
-       shareingContent(this);
+       sharingContent(this);
        var twitShare = 'https://twitter.com/share?url=' + pimg + '&text=' + title;
        
        window.open(twitShare,'Поделиться','toolbar=0,status=0,width=626,height=436');
@@ -256,16 +269,17 @@ $(document).ready(function () {
     }); 
     $(box).on('click', facebookShare, function(e){
       e.preventDefault();
-      shareingContent(this); 
+      sharingContent(this); 
       var faceShare = 'https://www.facebook.com/sharer/sharer.php?u=' + pimg;
       window.open(faceShare,'Поделиться','toolbar=0,status=0,width=626,height=436');
    }); 
    $(box).on('click', odnoklassnikiShare, function(e){
     e.preventDefault();
-    shareingContent(this); 
+    sharingContent(this); 
     var odnoklassnikShare = 'https://connect.ok.ru/offer?url=' + pimg;
     window.open(odnoklassnikShare,'Поделиться','toolbar=0,status=0,width=626,height=436');
  }); 
   }
-  shareing(".social-vk-share", ".social-twitter-share", ".social-facebook-share", ".social-odnoklassniki-share", ".modal-book");  
+  sharing(".social-vk-share", ".social-twitter-share", ".social-facebook-share", ".social-odnoklassniki-share", ".modal-book");  
 })
+
