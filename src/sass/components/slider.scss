@@ -47,7 +47,7 @@
   h1 {
     font-family: 'Georgia';
     font-weight: bold;
-    font-size: 36px;
+    font-size: 34px;
     padding-bottom: 10px;
   }
   h2 {
@@ -67,6 +67,17 @@
 } 
 .modal-bar__item__active {
   order: -1;
+}
+
+@media (max-width: 750px) {
+  .slide-item h1 {
+    height: 70px;
+  }
+}
+@media (max-width: 715px) {
+  .slide-item h1 {
+    font-size: 30px;
+  }
 }
 @media (max-width: 450px) {
   .slider-arrow {

@@ -1,0 +1,113 @@
+.bookgame {
+    &-share {
+        &__icon {
+            width: 18px;
+            height: 18px;
+            fill: #0037A6;
+        }
+    }
+    &__title {
+        color: white;
+        font-size: 30px;
+        font-weight: 500;
+    }
+    &__subtitle {
+        color: white;
+        font-family: 'Georgia', sans-serif;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 138%;
+        padding: 17px 0 27px 0;
+    }
+    &__text {
+        color: white;
+        font-family: Rubik;
+        font-style: normal;
+        font-weight: 300;
+        opacity: 0.6;
+        font-size: 11px;
+        max-width: 450px;
+        line-height: 136%;
+        padding-bottom: 30px;
+    }
+    &__line {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        p {
+            font-size: 18px;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%) rotate(-90deg);
+        }
+    }
+    &-wrap {
+        width: 100%;
+        background: url('../../img/block-background.png'), linear-gradient(0deg, #0037A6, #0037A6) no-repeat center;
+        background-size: cover;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+        padding: 50px 45px 40px 50px;
+        position: relative;
+    }
+    &-icon {
+        background: white;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 50%;
+        margin: 0 5px;
+        &:hover {
+            fill: white;
+        }
+    }
+    &-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &__share {
+            display: flex;
+            align-items: center;
+            p {
+                padding-right: 15px;
+                color: rgba(white, 0.7)
+            }
+        }
+        &__link {
+            cursor: pointer;
+            text-transform: uppercase;
+            color: #003da3;
+            border-radius: 50px;
+            font-size: 14px;
+            padding: 13px 70px 10px 70px;
+            background: #FEDD62;
+            border: none;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 500;
+        }
+    }
+}
+// @media (max-width: 750px) {
+//     .bookgame-footer {
+//         display: block;
+//         &__share {
+//             padding-top: 15px;
+//         }
+//     }
+// }
+// @media (max-width: 500px) {
+//     .bookgame-wrap {
+//         padding: 15px;
+//     }
+//     .bookgame-footer__share {
+//         flex-wrap: wrap;
+//         p {
+//             width: 100%;
+//             padding-bottom: 10px;
+//         }
+//     }
+// }
