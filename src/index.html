@@ -33,16 +33,18 @@
               </div>
             </div>
           </div>
-          <div class="modal-bars">
-            <div class="modal-bar modal-bar__page">
-              <h4>Страница</h4> 
-              <input type="number" value="1" class="modal-bar__current modal-bar__item"></input>
-              <div class="modal-bar__select select-page"></div>
-            </div>
-            <div class="modal-bar modal-bar__string">
-              <h4>Строка</h4>
-              <input type="number" value="1" class="modal-bar__current modal-bar__item"></input>
-              <div class="modal-bar__select select-string"> 
+          <div class="modal-bar__wrap">
+            <div class="modal-bars">
+              <div class="modal-bar modal-bar__page">
+                <h4>Страница</h4> 
+                <input type="number" value="1" class="modal-bar__current modal-bar__item"></input>
+                <div class="modal-bar__select select-page"></div>
+              </div>
+              <div class="modal-bar modal-bar__string">
+                <h4>Строка</h4>
+                <input type="number" value="1" class="modal-bar__current modal-bar__item"></input>
+                <div class="modal-bar__select select-string"> 
+                </div>
               </div>
             </div>
           </div>
@@ -52,7 +54,12 @@
           </div>
         </div>
         <div class="modal-book">
-          <img class="modal-book__text" src="" alt="">
+          <div class="modal-book-image">
+            <img class="modal-book__text" alt="">
+            <div class="modal-book__loader">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+          </div>
           <div class="social-links">
             <p>Поделиться с друзьями:</p>
             <button class="social-button social-vk-share"><div class="svg social-icon social-vk" data-src="img/icons/vk.svg"></button>

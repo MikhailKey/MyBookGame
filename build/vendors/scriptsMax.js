@@ -1,49 +1,65 @@
-$(document).ready(function () {
-  
-  let selectedOption = $('.modal-bar__current'),
-    choosenSelect = $('.modal-bar__select'),
-    loader = true,
+//Constants
+const selectedOption = $('.modal-bar__current'),
     chooseWindow = $('.modal-preview'),
     resultWindow = $('.modal-book'),
-    dataArray = [];
+    modalEventSelector =  $('.modal-slider'),
+    modalBar = $('.modal-bar__select'),
+    resultButton = $('.modal-button'),
+    randomButton = $('.modal-button__newrandom'),
+    againButton = $('.modal-again');
 
-  function Loader(preloader) {
+//Functions values
+  
+    let loader = true,
+    dataArray = [];
+     
+
+//Functions
+
+  // preloader
+  function Loader(selector) {
     if (loader) {
-      $(preloader).fadeIn(500);
+      $(selector).fadeIn(500);
     } else {
-      $(preloader).fadeOut(250);
+      $(selector).fadeOut(250);
     }
   }
 
-  function makeBooksList(json) {
-    let content = ``;
-    json.map((book) => {
-      let pagesCount = book.pageCount,
-        linesCount = book.linePerPageCount;
-      content += `
-      <div data-id=${book.id} data-pageCount="${pagesCount}" data-linesCount="${linesCount}" class="slide-item">
-        <h1>${book.name}</h1>
-        <h2>${book.author}</h2>
-        <span>${book.yearPublishing}</span>
-        <img src="${book.img}" alt="">
-      </div>
-      `
-    })
-    $('.modal-slider').html(content);
+  function bookTemplate(book){
+    const {id, pageCount, linePerPageCount, name, author, yearPublishing, img} = book;
+
+    return `<div data-id=${id} data-pageCount="${pageCount}" data-linesCount="${linePerPageCount}" class="slide-item">
+      <h1>${name}</h1>
+      <h2>${author}</h2>
+      <span>${yearPublishing}</span>
+      <img src="${img}" alt="">
+    </div>`;
   }
 
-  function changeSelect() {
-    let pageCount = Number($('.slick-active').attr('data-pagecount')),
-      linesCount = Number($('.slick-active').attr('data-linescount')),
+  function makeBooksList(jsonMap, modalSelector) {
+    let content = '';
+
+    jsonMap.map((book) => {
+      content += bookTemplate(book)
+    })
+
+    $(modalSelector).html(content);
+  }
+
+  function modalItemTamplate(count){
+    return  `<div class="modal-bar__item">${count}</div>`;
+  }
+
+  function changeSelect(slickSelector, choosenSelect) {
+    let pageCount = Number($(slickSelector).attr('data-pagecount')),
+      linesCount = Number($(slickSelector).attr('data-linescount')),
       pageSelect = '',
       stringSelect = '';
-
-    for (let i = 1; i < pageCount + 1; i++) {
-      pageSelect += `<div class="modal-bar__item">${i}</div>`;
-    }
-
-    for (let i = 1; i < linesCount + 1; i++) {
-      stringSelect += `<div class="modal-bar__item">${i}</div>`;
+    let i = 1;
+    while(i < pageCount && i < linesCount){
+      i++;
+      if(i < pageCount) pageSelect += modalItemTamplate(i);
+      if(i < linesCount) stringSelect +=  modalItemTamplate(i);
     }
 
     $(choosenSelect).eq(0).html(pageSelect);
@@ -60,7 +76,28 @@ $(document).ready(function () {
     }
   }
 
-  $('.modal-slider').on('afterChange', () => changeSelect());
+  function inputChange(inputsArray, slickSelector) {
+    
+    $(inputsArray).each(function (i, input) {
+      $(input).on('input', function (e) {
+        let pageCount = Number($(slickSelector).attr('data-pagecount')),
+          linesCount = Number($(slickSelector).attr('data-linescount'));
+        if ($(this).siblings(modalBar).hasClass('select-page')) {
+          if ($(this).val() > pageCount) {
+            $(this).val(pageCount);
+          }
+        } else {
+          if ($(this).val() > linesCount) {
+            $(this).val(linesCount);
+          }
+        }
+        this.value = e.target.value;
+        
+        $(this).attr('value', e.target.value);
+        $(this).val(e.target.value);
+      })
+    })
+  }
 
   function ajaxLiveLoad(url) {
     Loader('.lds-ripple');
@@ -72,7 +109,7 @@ $(document).ready(function () {
         Loader('.lds-ripple');
         $(chooseWindow).fadeIn(500);
         if (data.length > 0 && data != '') {
-          makeBooksList(data);
+          makeBooksList(data, '.modal-slider');
           dataArray = data;
           $('.modal-slider').slick({
             infinite: true,
@@ -81,8 +118,8 @@ $(document).ready(function () {
             prevArrow: $('.slider-arrow__left'),
             nextArrow: $('.slider-arrow__right'),
           });
-          inputChange();
-          changeSelect();
+          inputChange('.modal-bar__current', '.slick-active');
+          changeSelect('.slick-active', modalBar);
         }
       },
       error: function () {
@@ -95,42 +132,18 @@ $(document).ready(function () {
     });
   }
 
-  ajaxLiveLoad('https://cors-anywhere.herokuapp.com/moya-kniga.ru/ajax/game.php');
-
-  function inputChange() {
-    let inputs = $('.modal-bar__current');
-
-    $(inputs).each(function (i, input) {
-      $(input).on('input', function (e) {
-        let pageCount = Number($('.slick-active').attr('data-pagecount')),
-          linesCount = Number($('.slick-active').attr('data-linescount'));
-        if ($(this).siblings($('.modal-bar__select')).hasClass('select-page')) {
-          if ($(this).val() > pageCount) {
-            $(this).val(pageCount);
-          }
-        } else {
-          if ($(this).val() > linesCount) {
-            $(this).val(linesCount);
-          }
-        }
-        $(this).attr('value', e.target.value);
-        $(this).val(e.target.value);
-      })
-    })
-  }
-
   function showSelect() {
     let selectWrap = $('.modal-bar__current');
-
+    
     function chooseSelect(number) {
-      let length = ($('.modal-bar__select').eq(number).children().length) * 30;
+      let length = ($(modalBar).eq(number).children().length) * 30;
       if (length >= 210) {
-        $('.modal-bar__select').eq(number).css({
+        modalBar.eq(number).css({
           'max-height': '210px',
           'overflow-y': 'auto'
         });
       } else {
-        $('.modal-bar__select').eq(number).css({
+        modalBar.eq(number).css({
           'overflow': 'visible',
           'height': `${length}px`,
         });
@@ -138,7 +151,7 @@ $(document).ready(function () {
     }
 
     $(selectWrap).on('click', function () {
-      if ($(this).siblings($('.modal-bar__select')).hasClass('select-page')) {
+      if ($(this).siblings(modalBar).hasClass('select-page')) {
         chooseSelect(0)
       } else {
         chooseSelect(1)
@@ -146,13 +159,11 @@ $(document).ready(function () {
     })
   }
 
-  showSelect()
-
   function hideSelect() {
     $(document).mouseup(function (e) {
-      if (!$('.modal-bar__select').is(e.target)
-        && $('.modal-bar__select').has(e.target).length === 0) {
-        $('.modal-bar__select').css({
+      if (!$(modalBar).is(e.target)
+        && modalBar.has(e.target).length === 0) {
+          modalBar.css({
           'max-height': '0',
           'overflow': 'hidden'
         });
@@ -160,9 +171,9 @@ $(document).ready(function () {
     });
     $(document).on('keypress', function (e) {
       if (e.which == 13) {
-        if (!$('.modal-bar__select').is(e.target)
-          && $('.modal-bar__select').has(e.target).length === 0) {
-          $('.modal-bar__select').css({
+        if (!$(modalBar).is(e.target)
+          && modalBar.has(e.target).length === 0) {
+            modalBar.css({
             'max-height': '0',
             'overflow': 'hidden'
           });
@@ -171,36 +182,30 @@ $(document).ready(function () {
     });
   }
 
-  hideSelect()
-
   function chooseOption() {
-    $('.modal-bar__select').on('click', '.modal-bar__item', function () {
+    modalBar.on('click', '.modal-bar__item', function () {
       let cont = $(this).text();
       let currentSelect = $('.modal-bar__current');
-      if ($(this).closest($('.modal-bar__select')).hasClass('select-page')) {
+      if ($(this).closest(modalBar).hasClass('select-page')) {
         $(currentSelect).eq(0).val(cont);
         $(currentSelect).eq(0).attr('value', cont);
       } else {
         $(currentSelect).eq(1).val(cont);
         $(currentSelect).eq(1).attr('value', cont);
       }
-      $(this).closest('.modal-bar__select').css({
+      $(this).closest(modalBar).css({
         'max-height': '0',
         'overflow': 'hidden'
       });
     })
   }
 
-  chooseOption()
+  function changeImage(url) {
+    let image = $('.modal-book__text');
+    $(image).attr('src', url);
+  }
 
   function sendResult(arg) {
-    let image = $('.modal-book__text')[0];
-    loader = true;
-    Loader('.modal-book__loader');
-    image.onload = function() {
-      loader = false;
-      Loader('.modal-book__loader');
-    };
     let id = $('.slick-current').attr('data-id'),
       pageNumber = Number($(selectedOption).eq(0).attr('value')),
       linePerPageNumber = Number($(selectedOption).eq(1).attr('value'));
@@ -217,35 +222,6 @@ $(document).ready(function () {
     $(resultWindow).fadeIn(500);
     changeImage(url);
   }
-
-  function changeImage(url) {
-    let image = $('.modal-book__text');
-    $(image).attr('src', url);
-  }
-
-  let resultButton = $('.modal-button');
-  $(resultButton).on('click', () => {
-    $(chooseWindow).hide();
-    sendResult();
-  })
-
-  let randomResultButton = $('.modal-button__random');
-  $(randomResultButton).on('click', () => {
-    $(chooseWindow).hide();
-    sendResult(true);
-  });
-
-  let randomButton = $('.modal-button__newrandom');
-  $(randomButton).on('click', function () {
-    sendResult(true);
-  })
-
-
-  let againButton = $('.modal-again');
-  $(againButton).on('click', function () {
-    $(chooseWindow).fadeIn(500);
-    $(resultWindow).hide();
-  })
 
   function sharing(vkShare, twitterShare, facebookShare, odnoklassnikiShare, box) {
     var url = '';
@@ -283,6 +259,43 @@ $(document).ready(function () {
       window.open(odnoklassnikShare, 'Поделиться', 'toolbar=0,status=0,width=626,height=436');
     });
   }
+
+//Page Ready
+$(document).ready(function () {
+  //modal change select event
+  modalEventSelector.on('afterChange',  () => changeSelect('.slick-active', modalBar));
+  //get books request
+  ajaxLiveLoad('https://cors-anywhere.herokuapp.com/moya-kniga.ru/ajax/game.php');
+
+  //open popup for select page or string
+  showSelect()
+  //hide varitant for select
+  hideSelect()
+
+  //click variant for choose
+  chooseOption()
+  
+  //take result page
+  $(resultButton).on('click', () => {
+    $(chooseWindow).hide();
+    sendResult();
+  })
+
+  //post with results
+  $(randomResultButton).on('click', () => {
+    $(chooseWindow).hide();
+    sendResult(true);
+  });
+
+  //randomize results
+  $(randomButton).on('click', function () {
+    sendResult(true);
+  })
+  // refresh for play again
+  $(againButton).on('click', function () {
+    $(chooseWindow).fadeIn(500);
+    $(resultWindow).hide();
+  })
+  //social sharing for vk, facebook, odn, twitter
   sharing(".social-vk-share", ".social-twitter-share", ".social-facebook-share", ".social-odnoklassniki-share", ".modal-book");
 })
-
