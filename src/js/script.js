@@ -201,6 +201,9 @@ $(document).ready(function () {
       loader = false;
       Loader('.modal-book__loader');
     };
+    image.onerror = function() {
+      $('.modal-book__loader').html('<p class="modal-book__error">Произошла ошибка <br> Пожалуйста, воспользуйтесь сервисом позднее</p>')
+    }
     let id = $('.slick-current').attr('data-id'),
       pageNumber = Number($(selectedOption).eq(0).attr('value')),
       linePerPageNumber = Number($(selectedOption).eq(1).attr('value'));

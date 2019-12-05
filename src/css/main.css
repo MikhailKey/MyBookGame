@@ -538,6 +538,14 @@ table {
   padding: 0 40px;
 }
 
+.modal-book__error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 150px;
+  color: white;
+}
+
 .modal-book-image {
   position: relative;
 }

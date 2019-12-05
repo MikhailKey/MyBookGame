@@ -68,6 +68,13 @@
     text-align: center;
     display: none;
     padding: 0 40px;
+    &__error {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 150px;
+      color: white;
+    }
     &-image {
       position: relative;
     }
