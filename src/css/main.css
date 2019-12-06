@@ -555,8 +555,8 @@ table {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 99%;
+  height: 99%;
   background: #1748ae;
   border-radius: 5px;
 }
@@ -848,7 +848,7 @@ input::-webkit-inner-spin-button {
 .slide-item h1 {
   font-family: 'Georgia';
   font-weight: bold;
-  font-size: 34px;
+  font-size: 28px;
   padding-bottom: 10px;
 }
 
