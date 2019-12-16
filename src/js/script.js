@@ -21,7 +21,7 @@ $(document).ready(function () {
       let pagesCount = book.pageCount,
         linesCount = book.linePerPageCount;
       content += `
-      <div data-id=${book.id} data-pageCount="${pagesCount}" data-linesCount="${linesCount}" class="slide-item">
+      <div data-id=${book.id} data-pageCount="${pagesCount}" data-url="${book.url}" data-linesCount="${linesCount}" class="slide-item">
         <h1>${book.name}</h1>
         <h2>${book.author}</h2>
         <span>${book.yearPublishing}</span>
@@ -208,15 +208,20 @@ $(document).ready(function () {
       pageNumber = Number($(selectedOption).eq(0).attr('value')),
       linePerPageNumber = Number($(selectedOption).eq(1).attr('value'));
     let url = '';
+    let bookLink = $('.slick-active').attr('data-url');
+    console.log(bookLink);
     if (!arg) {
       url = `http://moya-kniga.ru/ajax/game.php?id=${id}&pageNumber=${pageNumber}&linePerPageNumber=${linePerPageNumber}`;
     } else {
+
       let randomData = dataArray[Math.floor(Math.random() * (dataArray.length))];
       id = randomData.id;
+      bookLink = randomData.url;
       pageNumber = Math.floor(Math.random() * (randomData.pageCount) + 1);
       linePerPageNumber = Math.floor(Math.random() * (randomData.linePerPageCount) + 1);
       url = `http://moya-kniga.ru/ajax/game.php?id=${id}&pageNumber=${pageNumber}&linePerPageNumber=${linePerPageNumber}`;
     }
+    $('.modal-buy__link').attr('href', bookLink);
     $(resultWindow).fadeIn(500);
     changeImage(url);
   }

@@ -194,18 +194,15 @@ table {
   padding: 12px 18px;
   cursor: pointer;
   width: 225px;
-  border-radius: 5px;
+  border-radius: 50px;
   border: none;
   color: #e3e3e3;
   background: #0037a6;
   background-position: right;
+  border: 1px solid #0037a6;
   transition: 0.5s;
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
-}
-
-.main-button:hover {
-  background: #2560d4;
 }
 
 .game {
@@ -261,7 +258,7 @@ table {
 
 .bookgame-wrap {
   width: 100%;
-  background: url("../img/block-background.png"), linear-gradient(0deg, #0037A6, #0037A6) no-repeat center;
+  background: url("../img/book-background.jpg") no-repeat center;
   background-size: cover;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
   padding: 50px 45px 40px 50px;
@@ -460,7 +457,6 @@ table {
   }
 }
 .modal-close {
-  font-size: 40px;
   color: black;
   position: absolute;
   top: 25px;
@@ -470,8 +466,13 @@ table {
   z-index: 1000;
 }
 
+.modal-close svg {
+  width: 25px;
+  height: 25px;
+}
+
 .modal-close:hover {
-  color: red;
+  fill: white;
 }
 
 .modal-preview {
@@ -509,12 +510,34 @@ table {
 .modal-bg {
   width: 100vw;
   height: 100vh;
-  background: url("img/flower-background.png") no-repeat center;
+  background: url("img/book-background.jpg") no-repeat center;
   background-size: cover;
   position: absolute;
   top: 0;
   left: 0;
   overflow: auto;
+}
+
+.modal-buy {
+  text-align: center;
+  font-size: 16px;
+  padding: 12px 18px;
+  cursor: pointer;
+  width: 225px;
+  border-radius: 50px;
+  border: none;
+  color: #0037a6;
+  background: white;
+  border: 1px solid #0037a6;
+  background-position: right;
+  transition: 0.5s;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+}
+
+.modal-buy:hover {
+  background: #0037a6;
+  color: white;
 }
 
 .modal-content {
